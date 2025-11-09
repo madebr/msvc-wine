@@ -1,0 +1,20 @@
+{
+  "version": "10.0sp1",
+  "include": [
+    "VC/include",
+    "Microsoft SDKs/Windows/v7.0A/Include",
+    "VC/atlmfc/include"
+  ],
+  "lib": [
+    "VC/lib",
+    "Microsoft SDKs/Windows/v7.0A/Lib",
+    "VC/atlmfc/lib"
+  ],
+  "winepath": [
+    "VC/bin",
+    "VC/bin/1033",
+    "Microsoft SDKs/Windows/v7.0A/bin"
+  ],
+  "conflict": {
+  }
+}

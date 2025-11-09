@@ -1,0 +1,20 @@
+{
+  "version": "7.1",
+  "include": [
+    "Vc7/include",
+    "Vc7/PlatformSDK/Include",
+    "Vc7/atlmfc/include"
+  ],
+  "lib": [
+    "Vc7/lib",
+    "Vc7/PlatformSDK/Lib",
+    "Vc7/atlmfc/lib"
+  ],
+  "winepath": [
+    "Vc7/bin",
+    "Common7/Tools",
+    "Common7/Tools/Bin"
+  ],
+  "conflict": {
+  }
+}

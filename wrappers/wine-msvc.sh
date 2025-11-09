@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 #
+# Copyright (c) 2025 archaic-msvc developers
 # Copyright (c) 2018 Martin Storsjo
 #
 # Permission to use, copy, modify, and/or distribute this software for any
@@ -14,7 +15,9 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-MSVCTRICKS_EXE="$(dirname $0)/../msvctricks.exe"
+set -e
+
+MSVCTRICKS_EXE=$(cd -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd)")/msvctricks.exe
 EXE=$1
 shift
 
@@ -57,7 +60,7 @@ for a; do
 	ARGS+=("$a")
 done
 
-WINE=$(command -v wine64 || command -v wine || false)
+WINE=$(command -v wine || false)
 export WINEDEBUG=${WINEDEBUG:-"-all"}
 
 if [ -n "$WINE_MSVC_RAW_STDOUT" ]; then

@@ -1,0 +1,19 @@
+{
+  "version": "5.0",
+  "include": [
+    "include",
+    "atl/include",
+    "mfc/include"
+  ],
+  "lib": [
+    "lib",
+    "mfc/lib"
+  ],
+  "winepath": [
+    "bin",
+    "debug",
+    "redist"
+  ],
+  "conflict": {
+  }
+}

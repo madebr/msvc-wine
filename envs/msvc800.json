@@ -1,0 +1,22 @@
+{
+  "version": "8.0",
+  "include": [
+    "VC/include",
+    "VC/PlatformSDK/Include",
+    "VC/atlmfc/include"
+  ],
+  "lib": [
+    "VC/lib",
+    "VC/PlatformSDK/Lib",
+    "VC/atlmfc/lib"
+  ],
+  "winepath": [
+    "VC/bin",
+    "Common7/Tools",
+    "Common7/Tools/Bin"
+  ],
+  "conflict": {
+    "mt": "VC/bin/mt.exe",
+    "rc": "VC/bin/rc.exe"
+  }
+}

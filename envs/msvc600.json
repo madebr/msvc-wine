@@ -1,0 +1,17 @@
+{
+  "version": "6.0",
+  "include": [
+    "VC98/Include",
+    "VC98/ATL/Include",
+    "VC98/MFC/Include"
+  ],
+  "lib": [
+    "VC98/Lib",
+    "VC98/MFC/Lib"
+  ],
+  "winepath": [
+    "VC98/Bin"
+  ],
+  "conflict": {
+  }
+}

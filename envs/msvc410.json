@@ -1,0 +1,17 @@
+{
+  "version": "4.10",
+  "include": [
+    "include",
+    "mfc/include"
+  ],
+  "lib": [
+    "lib",
+    "mfc/lib"
+  ],
+  "winepath": [
+    "bin",
+    "debug"
+  ],
+  "conflict": {
+  }
+}
