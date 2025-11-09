@@ -34,7 +34,7 @@ def main():
         toolchain_json = json.load(f)
 
     vcvars_path = args.location / "VC/Auxiliary/Build/vcvarsall.bat"
-    vcvars_path.parent.mkdir(exist_ok=True)
+    vcvars_path.parent.mkdir(exist_ok=True, parents=True)
 
     def path_list_to_cmd_variable(rel_paths: list[str]) -> str:
         result = ";".join("%__MSVC_ROOT%\\" + p.replace("/", "\\") for p in rel_paths)
