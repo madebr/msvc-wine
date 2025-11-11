@@ -1,19 +1,35 @@
 {
   "version": "5.0",
-  "include": [
-    "include",
-    "atl/include",
-    "mfc/include"
-  ],
-  "lib": [
-    "lib",
-    "mfc/lib"
-  ],
-  "winepath": [
-    "bin",
-    "debug",
-    "redist"
-  ],
-  "conflict": {
+  "compiler-paths": {
+    "host": {
+      "x86": {
+        "target": {
+          "x86": {
+            "path": [
+              "bin",
+              "redist"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "sdk-paths": {
+    "target": {
+      "x86": {
+        "path": [
+          "debug"
+        ],
+        "include": [
+          "include",
+          "atl/include",
+          "mfc/include"
+        ],
+        "lib": [
+          "lib",
+          "mfc/lib"
+        ]
+      }
+    }
   }
 }

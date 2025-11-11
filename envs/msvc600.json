@@ -1,17 +1,31 @@
 {
   "version": "6.0",
-  "include": [
-    "VC98/Include",
-    "VC98/ATL/Include",
-    "VC98/MFC/Include"
-  ],
-  "lib": [
-    "VC98/Lib",
-    "VC98/MFC/Lib"
-  ],
-  "winepath": [
-    "VC98/Bin"
-  ],
-  "conflict": {
+  "compiler-paths": {
+    "host": {
+      "x86": {
+        "target": {
+          "x86": {
+            "path": [
+              "VC98/Bin"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "sdk-paths": {
+    "target": {
+      "x86": {
+        "include": [
+          "VC98/Include",
+          "VC98/ATL/Include",
+          "VC98/MFC/Include"
+        ],
+        "lib": [
+          "VC98/Lib",
+          "VC98/MFC/Lib"
+        ]
+      }
+    }
   }
 }

@@ -1,20 +1,34 @@
 {
   "version": "7.1",
-  "include": [
-    "Vc7/include",
-    "Vc7/PlatformSDK/Include",
-    "Vc7/atlmfc/include"
-  ],
-  "lib": [
-    "Vc7/lib",
-    "Vc7/PlatformSDK/Lib",
-    "Vc7/atlmfc/lib"
-  ],
-  "winepath": [
-    "Vc7/bin",
-    "Common7/Tools",
-    "Common7/Tools/Bin"
-  ],
-  "conflict": {
+  "compiler-paths": {
+    "host": {
+      "x86": {
+        "target": {
+          "x86": {
+            "path": [
+              "Vc7/bin",
+              "Common7/Tools",
+              "Common7/Tools/Bin"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "sdk-paths": {
+    "target": {
+      "x86": {
+        "include": [
+          "Vc7/include",
+          "Vc7/PlatformSDK/Include",
+          "Vc7/atlmfc/include"
+        ],
+        "lib": [
+          "Vc7/lib",
+          "Vc7/PlatformSDK/lib",
+          "Vc7/atlmfc/lib"
+        ]
+      }
+    }
   }
 }
