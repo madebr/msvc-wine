@@ -40,7 +40,7 @@
           "VC/redist/x86/Microsoft.VC90.CRT",
           "VC/redist/x86/Microsoft.VC90.MFC",
           "VC/redist/x86/Microsoft.VC90.MFCLOC",
-          "VC/redist/x86/Microsoft.VC90.OpenMP",
+          "VC/redist/x86/Microsoft.VC90.OPENMP",
           "VC/redist/Debug_NonRedist/amd64/Microsoft.VC90.DebugCRT",
           "VC/redist/Debug_NonRedist/amd64/Microsoft.VC90.DebugMFC",
           "VC/redist/Debug_NonRedist/amd64/Microsoft.VC90.DebugOpenMP"

@@ -17,5 +17,6 @@
 
 set -e
 
-. "$(dirname "$0")/msvcenv.sh"
-"$(dirname "$0")/wine-msvc.sh" "${MSVC_MT_BIN:=${MSVC_BINDIR}\\mt.exe}" "$@"
+# Do nothing
+# https://github.com/archaic-msvc/msvc800/issues/3
+# https://bugs.winehq.org/show_bug.cgi?id=58929

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Copyright (c) 2025 archaic-msvc developers
-# Copyright (c) 2018 Martin Storsjo
+# Copyright (c) 2024 Huang Qinjin
 #
 # Permission to use, copy, modify, and/or distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -17,5 +17,4 @@
 
 set -e
 
-. "$(dirname "$0")/msvcenv.sh"
-"$(dirname "$0")/wine-msvc.sh" "${MSVC_MT_BIN:=${MSVC_BINDIR}\\mt.exe}" "$@"
+exec grep "$@"

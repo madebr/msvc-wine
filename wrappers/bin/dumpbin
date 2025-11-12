@@ -18,4 +18,10 @@
 set -e
 
 . "$(dirname "$0")/msvcenv.sh"
-"$(dirname "$0")/wine-msvc.sh" "${MSVC_MT_BIN:=${MSVC_BINDIR}\\mt.exe}" "$@"
+
+# /PDBPATH
+unixify_path='/^(Dump of file |  PDB file found at )/{ s/z:([\\/])/\1/i; s,\\,/,g; }'
+
+export WINE_MSVC_STDOUT_SED="$unixify_path"
+
+"$(dirname "$0")/wine-msvc.sh" "${MSVC_DUMPBIN_BIN:=${MSVC_BINDIR}\\dumpbin.exe}" "$@"

@@ -18,4 +18,5 @@
 set -e
 
 . "$(dirname "$0")/msvcenv.sh"
-"$(dirname "$0")/wine-msvc.sh" "${MSVC_MT_BIN:=${MSVC_BINDIR}\\mt.exe}" "$@"
+
+"$(dirname "$0")/wine-msvc.sh" "${MSVC_F90COM_BIN:=${MSVC_BINDIR}\\f90com.exe}" "$@"
