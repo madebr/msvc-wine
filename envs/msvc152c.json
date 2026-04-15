@@ -1,0 +1,31 @@
+{
+  "version": "1.52c",
+  "compiler-paths": {
+    "host": {
+      "x86": {
+        "target": {
+          "x86": {
+            "path": [
+              "bin",
+              "debug"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "sdk-paths": {
+    "target": {
+      "x86": {
+        "include": [
+          "include",
+          "mfc/include"
+        ],
+        "lib": [
+          "lib",
+          "mfc/lib"
+        ]
+      }
+    }
+  }
+}
