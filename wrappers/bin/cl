@@ -26,10 +26,72 @@ unixify_line='/^[[:blank:]]*#[[:blank:]]*line[[:blank:]]/{ s/z:([\\/])/\1/i; s,\
 # Warnings and Errors
 unixify_note='/^[zZ]:.*\([[:digit:]]+\): (note|error C[[:digit:]]{4}|warning C[[:digit:]]{4}): /{ s/z:([\\/])/\1/ig; s,\\,/,g; }'
 
+CL_ARGS=()
+
+showIncludesPresent=0
+sbPresent=
+objectPath=
+sbrPath=
+SOURCES=()
+
+for a; do
+  filterOut=0
+	path=
+  case "$a" in
+    [/-]showIncludes)
+      showIncludesPresent=1
+      filterOut=1
+      ;;
+    -Fr*)
+      sbrPath="${a#-Fr}"
+      sbPresent=1
+      ;;
+    /Fr*)
+      sbrPath="${a#/Fr}"
+      sbPresent=1
+      ;;
+    -FR*)
+      sbrPath="${a#-FR}"
+      sbPresent=1
+      ;;
+    /Fr*)
+      sbrPath="${a#/FR}"
+      sbPresent=1
+      ;;
+    /Fo*)
+      objectPath="${a#/Fo}"
+      sbPresent=1
+      ;;
+    *.c|*.cpp|*.cxx|*.C|*.cc)
+      SOURCES+=("$a")
+      ;;
+    *)
+      ;;
+  esac
+	if [ ! $filterOut -eq 1 ]; then
+	  CL_ARGS+=("$a")
+  fi
+done
+
+if [ ${#SOURCES[@]} -eq 1 -a $showIncludesPresent -eq 1 -a -z "$sbrPath" ]; then
+  if [ ! -z "$objectPath" ]; then
+    sbrPath="${objectPath}.sbr"
+  else
+    sbrPath="${SOURCES[0]}.sbr"
+  fi
+	  CL_ARGS+=("-FR$sbrPath")
+fi
+
 export WINE_MSVC_STDOUT_SED="$unixify_path;$unixify_line;$unixify_note"
 export WINE_MSVC_STDERR_SED="$unixify_path"
 
-"$(dirname "$0")/wine-msvc.sh" "${MSVC_CL_BIN:=${MSVC_BINDIR}\\cl.exe}" "$@"
+"$(dirname "$0")/wine-msvc.sh" "${MSVC_CL_BIN:=${MSVC_BINDIR}\\cl.exe}" "${CL_ARGS[@]}"
+
+if [ ${#SOURCES[@]} -eq 1 -a $showIncludesPresent -eq 1 ]; then
+  if [ -f "$sbrPath" ]; then
+    "$(dirname "$0")/sbr2inc.py" --source "${SOURCES[1]}" "$sbrPath"
+  fi
+fi
 
 ec=$?
 [ $ec -ne 0 ] && exit $ec

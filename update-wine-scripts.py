@@ -79,6 +79,8 @@ def main():
             copy_shell_script(ROOT / f"wrappers/bin/{wrapper_stem}", wine_bin_path / wrapper_stem)
             os.symlink(wrapper_stem, wine_bin_path / f"{wrapper_stem}.exe")
 
+        shutil.copy(ROOT / "wrappers/sbr2inc.py", wine_bin_path / "sbr2inc.py")
+
         with (wine_bin_path / "msvcenv.sh").open("w", newline="\n") as f_env:
             wine_paths = toolchain_json["compiler-paths"]["host"][host_arch]["target"][target_arch].get("path", [])
             if host_arch == target_arch:
