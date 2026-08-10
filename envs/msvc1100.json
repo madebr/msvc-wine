@@ -1,0 +1,68 @@
+{
+  "version": "11.0",
+  "compiler-paths": {
+    "host": {
+      "x86": {
+        "target": {
+          "x86": {
+            "path": [
+              "VC/bin",
+              "VC/bin/1033",
+              "VC/redist/x86/Microsoft.VC110.CRT",
+              "Windows Kits/8.0/bin",
+              "VC/redist/x86/Microsoft.VC110.MFC",
+              "VC/redist/x86/Microsoft.VC110.MFCLOC",
+              "VC/redist/x86/Microsoft.VC110.OPENMP",
+              "VC/redist/Debug_NonRedist/x86/Microsoft.VC110.DebugCRT",
+              "VC/redist/Debug_NonRedist/x86/Microsoft.VC110.DebugMFC"
+            ]
+          },
+          "x64": {
+            "path": [
+              "VC/bin/amd64",
+              "VC/bin/amd64/1033",
+              "VC/bin",
+              "VC/redist/x64/Microsoft.VC110.CRT",
+              "Windows Kits/8.0/bin",
+              "VC/redist/x64/Microsoft.VC110.MFC",
+              "VC/redist/x64/Microsoft.VC110.MFCLOC",
+              "VC/redist/x64/Microsoft.VC110.OpenMP",
+              "VC/redist/Debug_NonRedist/x64/Microsoft.VC110.DebugCRT",
+              "VC/redist/Debug_NonRedist/x64/Microsoft.VC110.DebugMFC"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "sdk-paths": {
+    "target": {
+      "x86": {
+        "include": [
+          "VC/include",
+          "Windows Kits/8.0/include/um",
+          "Windows Kits/8.0/include/shared",
+          "VC/atlmfc/include"
+        ],
+        "lib": [
+          "VC/lib",
+          "Windows Kits/8.0/Lib/win8/um/x86",
+          "VC/atlmfc/lib"
+        ]
+      },
+      "x64": {
+        "include": [
+          "VC/include",
+          "Windows Kits/8.0/include/um",
+          "Windows Kits/8.0/include/shared",
+          "VC/atlmfc/include"
+        ],
+        "lib": [
+          "VC/lib/amd64",
+          "Windows Kits/8.0/Lib/win8/um/x64",
+          "VC/atlmfc/lib/amd64"
+        ]
+      }
+    }
+  }
+}

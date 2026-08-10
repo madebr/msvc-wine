@@ -1,5 +1,6 @@
 {
   "version": "6.0sp5",
+  "sbr2inc": true,
   "compiler-paths": {
     "host": {
       "x86": {

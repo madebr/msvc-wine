@@ -11,9 +11,11 @@ import platform
 import struct
 import typing
 
+print_enabled = False
 
 def my_print(*args, **kwargs):
-    # print(*args, **kwargs)
+    if print_enabled:
+        print(*args, **kwargs)
     pass
 
 
@@ -24,7 +26,7 @@ class WinePathDirCache:
 
     def lookup(self, name: str) -> Path:
         try:
-            return self.path / self.names[name]
+            return self.path / self.names[name.lower()]
         except KeyError as e:
             raise FileNotFoundError from e
 
@@ -90,21 +92,25 @@ def read_opcode(f):
         return None
     return ord(b)
 
+source_stack = []
+
 def do_identifier(f, identifiers, opcode, addr_mode1, addr_mode2):
+    global source_stack
     identifier_code = read_addr(f, addr_mode1)
-    if identifier_code in (0x01, 0x02, 0x21, 0x40, 0x60):
+    TYPE_NAMES = {
+        0x01: "NAMESPACE",
+        0x02: "GLOBAL_ARRAY",
+        0x21: "LOCAL",
+        #0x22: "FUNCTION_GLOBAL",  # needed for MSVC6, remove for MSVC5
+        #0x40: "GLOBAL",  # needed for MSVC6, remove for MSVC5
+        0x60: "TYPEDEF",
+    }
+    if identifier_code in TYPE_NAMES:
         # New identifier
         name_code = read_addr(f, addr_mode2)
         extra_str = f"{identifier_code:04X} {name_code:04X}"
         identifier_name = read_cstr(f)
-        type_name = {
-            0x01: "NAMESPACE",
-            0x02: "GLOBAL_ARRAY",
-            0x21: "LOCAL",
-            0x40: "GLOBAL",
-            0x60: "TYPEDEF",
-        }
-        my_print(f"{opcode:02X} {type_name[identifier_code]} '{identifier_name}' ({extra_str})")
+        my_print(f"{opcode:02X} {TYPE_NAMES[identifier_code]} '{identifier_name}' ({extra_str})")
         if name_code in identifiers:
             assert identifiers[name_code] == identifier_name
         identifiers[name_code] = identifier_name
@@ -140,9 +146,11 @@ def parse_sbr(f):
         if opcode == 1:
             source = read_cstr(f)
             my_print(f"{opcode:02X} ENTER '{source}'")
+            source_stack.append(source)
             files.append(source)
         elif opcode == 2:
-            my_print(f"{opcode:02X} LINE {read_word(f)}")
+            w = read_word(f)
+            my_print(f"{opcode:02X} LINE {w}")
         elif opcode == 3:
             statement_opcode = read_opcode(f)
             if statement_opcode == 1:
@@ -157,8 +165,8 @@ def parse_sbr(f):
                 code1 = read_word(f)
                 code2 = read_addr(f, mode=addr_mode)
                 name = read_cstr(f)
-                my_print(f"{opcode:02X} {statement_opcode:02X} LOCAL '{name}' ({code1:04X} {code2:04X})")
-                assert code2 not in identifiers
+                if code2 in identifiers:
+                    assert identifiers[code2] == name
                 identifiers[code2] = name
             elif statement_opcode == 4:
                 do_identifier(f, identifiers=identifiers, opcode=statement_opcode, addr_mode1=2, addr_mode2=addr_mode)
@@ -243,12 +251,15 @@ def parse_sbr(f):
                 raise ValueError(f"{statement_opcode:02X}")
         elif opcode == 4:
             do_identifier(f, identifiers=identifiers, opcode=opcode, addr_mode1=addr_mode, addr_mode2=addr_mode)
+        elif opcode == 7:
+            my_print(f"{opcode:02X} OP7")
         elif opcode == 8:
             my_print(f"{opcode:02X} ENTER_SCOPE")
         elif opcode == 9:
             my_print(f"{opcode:02X} LEAVE_SCOPE")
         elif opcode == 10:
             my_print(f"{opcode:02X} LEAVE")
+            source_stack.pop()
         elif opcode == 11:
             word1 = read_addr(f, mode=addr_mode)
             my_print(f"{opcode:02X} BODY ({word1:04X})")
@@ -259,7 +270,7 @@ def parse_sbr(f):
                 assert parent_type in identifiers
                 parent_op = read_word(f)
                 descr = f"{descr} ({parent_type:04X} {parent_op:04X})"
-                if parent_op in (0x0C04, 0x0C02, 0x4C04):
+                if parent_op in (0x0C02, 0x0C03, 0x0C04, 0x0C05, 0x4C04):
                     if parent_op & 0x4000:
                         addr_mode = 3
                     else:
@@ -267,12 +278,19 @@ def parse_sbr(f):
                     continue
                 if parent_op in (0x0904, 0x0902, ):
                     break
-                if parent_op in (0x0204, ):
+                if parent_op in (0x0104, ):
+                    # WTH
+                    f.seek(f.tell()-1)
+                    break
+                if parent_op in (0x0203, 0x0204, 0x0205):
                     w = read_word(f)
                     descr = f"{descr} {w:04X}"
                     break
-                raise ValueError(f"Unknown PARENT_CLASS op: {parent_op:04X}")
-            my_print(descr, identifiers)
+                raise ValueError(f"Unknown PARENT_CLASS op: {parent_op:04X} (pos={hex(f.tell())})")
+            my_print(descr)
+        elif opcode == 13:
+            word1 = read_addr(f, mode=addr_mode)
+            my_print(f"{opcode:02X} UNKNOWN ({word1:04X})")
         else:
             my_print(f"{opcode:02X} UNKNOWN(pos={hex(f.tell())})")
             raise ValueError
@@ -283,13 +301,19 @@ def main():
     parser = argparse.ArgumentParser(allow_abbrev=False)
     parser.add_argument("sbr", type=Path)
     parser.add_argument("--source", type=Path)
+    parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
+
+    global print_enabled
+    if args.verbose:
+        print_enabled = True
 
     with args.sbr.open("rb") as f:
         try:
             files = parse_sbr(f)
         except:
             my_print(f"pos={hex(f.tell())}")
+            my_print(f"source_stack={source_stack}")
             raise
 
     if args.source:

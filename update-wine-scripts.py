@@ -54,6 +54,7 @@ def main():
 
     set_available_wrappers = set(available_wrappers)
     msvc_bins = {}
+    sbr2inc: bool = toolchain_json.get("sbr2inc", False)
     for host_arch, target_arch in archs:
         bin_relpaths = toolchain_json["compiler-paths"]["host"][host_arch]["target"][target_arch].get("path", [])
         compiler_paths = msvc_bins.setdefault(host_arch, {}).setdefault(target_arch, {})
@@ -79,7 +80,8 @@ def main():
             copy_shell_script(ROOT / f"wrappers/bin/{wrapper_stem}", wine_bin_path / wrapper_stem)
             os.symlink(wrapper_stem, wine_bin_path / f"{wrapper_stem}.exe")
 
-        shutil.copy(ROOT / "wrappers/sbr2inc.py", wine_bin_path / "sbr2inc.py")
+        if sbr2inc:
+            shutil.copy(ROOT / "wrappers/sbr2inc.py", wine_bin_path / "sbr2inc.py")
 
         with (wine_bin_path / "msvcenv.sh").open("w", newline="\n") as f_env:
             wine_paths = toolchain_json["compiler-paths"]["host"][host_arch]["target"][target_arch].get("path", [])
@@ -96,7 +98,7 @@ def main():
                 #!/usr/bin/env bash
                 #
                 # Copyright (c) 2018 Martin Storsjo
-                # Copyright (c) 2025 archaic-msvc developers
+                # Copyright (c) 2025-2026 archaic-msvc developers
                 #
                 # Permission to use, copy, modify, and/or distribute this software for any
                 # purpose with or without fee is hereby granted, provided that the above
@@ -122,6 +124,9 @@ def main():
                 export WINEPATH="{env_winepath}"
             """))
             f_env.write("\n")
+            if sbr2inc:
+                f_env.write("SBR2INC=1\n")
+
             for wrapper_stem, exe_path in msvc_bins[host_arch][target_arch].items():
                 relative_location = str(exe_path.relative_to(args.location)).replace("/", "\\\\")
                 f_env.write(f"MSVC_{wrapper_stem.upper()}_BIN=\"${{MSVC_ROOT}}\\\\{relative_location}\"\n")
